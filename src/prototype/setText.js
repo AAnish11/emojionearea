@@ -8,10 +8,14 @@ define([
     'prototype/var/EmojioneArea'
 ],
 function($, emojioneReady, htmlFromText, trigger, calcButtonPosition, EmojioneArea) {
-    EmojioneArea.prototype.setText = function (str) {
+    EmojioneArea.prototype.setText = function (str, cb) {
         var self = this;
         emojioneReady(function () {
-            self.editor.html(htmlFromText(str, self));
+            var content = htmlFromText(str, self);
+            if (typeof cb == "function") {
+                return cb(content);
+            }
+            self.editor.html(content);
             self.content = self.editor.html();
             trigger(self, 'change', [self.editor]);
             calcButtonPosition.apply(self);
